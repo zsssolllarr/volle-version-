@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+
+<html lang="de">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Zukunftssolar | Feinplanung Upload</title>
+<style>
+    :root{
+      --green:#1bb46e;
+      --green-dark:#0f7f50;
+      --dark:#071812;
+      --panel:#0f241c;
+      --panel-2:#132f25;
+      --text:#f3fff9;
+      --muted:#a8c7ba;
+      --line:rgba(255,255,255,.12);
+      --white:#ffffff;
+      --danger:#ff6464;
+      --shadow:0 25px 80px rgba(0,0,0,.35);
+      --radius:24px;
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(27,180,110,.28), transparent 35%),
+        radial-gradient(circle at bottom right, rgba(27,180,110,.12), transparent 32%),
+        linear-gradient(135deg,#05110d,#091b15 45%,#030807);
+      min-height:100vh;
+    }
+
+    .page{max-width:1180px;margin:0 auto;padding:34px 18px 70px}
+    .hero{
+      display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:stretch;margin-bottom:24px;
+    }
+    .hero-card,.side-card,.form-shell{background:rgba(15,36,28,.82);border:1px solid var(--line);box-shadow:var(--shadow);backdrop-filter:blur(18px);border-radius:var(--radius)}
+    .hero-card{padding:34px;position:relative;overflow:hidden}
+    .hero-card:after{content:"";position:absolute;right:-90px;top:-90px;width:260px;height:260px;background:rgba(27,180,110,.22);border-radius:50%;filter:blur(5px)}
+    .brand{display:flex;align-items:center;gap:14px;margin-bottom:26px}
+    .logo{width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,var(--green),#d7ffe7);display:grid;place-items:center;color:#06140f;font-weight:900;font-size:22px;box-shadow:0 12px 35px rgba(27,180,110,.35)}
+    .brand h2{margin:0;font-size:21px;letter-spacing:.2px}.brand span{display:block;color:var(--muted);font-size:13px;margin-top:2px}
+    h1{font-size:42px;line-height:1.05;margin:0 0 16px;letter-spacing:-1.2px}.lead{font-size:17px;line-height:1.7;color:#cce6dc;max-width:650px;margin:0}
+    .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}.chip{padding:10px 13px;border:1px solid rgba(27,180,110,.35);background:rgba(27,180,110,.10);border-radius:999px;color:#dfffee;font-size:13px}
+    .side-card{padding:26px;display:flex;flex-direction:column;justify-content:space-between;gap:18px}
+    .stat{border-bottom:1px solid var(--line);padding-bottom:18px}.stat:last-child{border-bottom:0;padding-bottom:0}.stat strong{font-size:31px;display:block}.stat span{color:var(--muted);font-size:14px;line-height:1.5}
+
+    .form-shell{overflow:hidden}.progress{padding:24px 28px;border-bottom:1px solid var(--line);background:rgba(0,0,0,.16)}
+    .steps{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}.step-pill{height:9px;border-radius:99px;background:rgba(255,255,255,.13);overflow:hidden}.step-pill.active{background:linear-gradient(90deg,var(--green),#caffdb)}
+    .step-meta{display:flex;justify-content:space-between;gap:12px;margin-top:14px;color:var(--muted);font-size:14px}.step-meta b{color:var(--text)}
+    form{padding:30px}.section{display:none}.section.active{display:block;animation:fade .22s ease}@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+    .section h2{font-size:28px;margin:0 0 8px}.section p.sub{color:var(--muted);margin:0 0 24px;line-height:1.6}
+    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.grid.three{grid-template-columns:repeat(3,1fr)}.full{grid-column:1/-1}
+    label{display:block;font-weight:700;font-size:14px;margin-bottom:8px;color:#eafff4}.hint{font-weight:400;color:var(--muted);font-size:12px;margin-left:4px}
+    input,select,textarea{width:100%;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.075);color:var(--text);border-radius:16px;padding:14px 15px;font-size:15px;outline:none;transition:.18s}textarea{min-height:112px;resize:vertical}input:focus,select:focus,textarea:focus{border-color:rgba(27,180,110,.85);box-shadow:0 0 0 4px rgba(27,180,110,.11)}select option{color:#111;background:#fff}
+    .upload-card{border:1px dashed rgba(202,255,219,.34);background:rgba(255,255,255,.045);border-radius:20px;padding:18px;min-height:154px}.upload-card label{display:flex;align-items:center;justify-content:space-between;gap:10px}.upload-card small{display:block;color:var(--muted);line-height:1.45;margin-top:7px}.upload-card input{padding:12px;background:rgba(0,0,0,.15);border-radius:14px}
+    .required:after{content:" *";color:var(--green)}.notice{border:1px solid rgba(27,180,110,.28);background:rgba(27,180,110,.09);border-radius:18px;padding:16px 18px;color:#dcfff0;line-height:1.55;margin-bottom:22px}
+    .summary{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.summary-card{background:rgba(255,255,255,.055);border:1px solid var(--line);border-radius:18px;padding:17px}.summary-card h3{margin:0 0 12px;color:#dffff0;font-size:16px}.summary-card div{color:var(--muted);font-size:14px;line-height:1.8;white-space:pre-wrap}
+    .actions{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-top:30px;border-top:1px solid var(--line);padding-top:22px}.btn{border:0;border-radius:16px;padding:14px 20px;font-weight:900;font-size:15px;cursor:pointer;transition:.18s}.btn-primary{background:linear-gradient(135deg,var(--green),#baffd2);color:#06140f;box-shadow:0 12px 28px rgba(27,180,110,.28)}.btn-secondary{background:rgba(255,255,255,.09);color:var(--text);border:1px solid var(--line)}.btn:hover{transform:translateY(-1px)}.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+    .footer-note{margin-top:18px;color:var(--muted);font-size:13px;line-height:1.55}.success{display:none;text-align:center;padding:34px;border-radius:22px;background:rgba(27,180,110,.10);border:1px solid rgba(27,180,110,.30)}
+    .success h2{margin-top:0}.badge{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:8px 12px;color:#dffff0;background:rgba(255,255,255,.06);font-size:13px;margin-bottom:16px}
+
+    .auto-hidden{display:none!important}
+    .tp2-auto-box{display:none;padding:15px;border-radius:18px;background:rgba(124,255,155,.08);border:1px solid var(--line);color:#dcffe5;font-size:13px;line-height:1.5}
+    .tp2-auto-box.show{display:block}
+
+    @media(max-width:900px){.hero{grid-template-columns:1fr}h1{font-size:34px}.grid,.grid.three,.summary{grid-template-columns:1fr}.steps{grid-template-columns:repeat(7,1fr)}form{padding:22px}.progress{padding:20px}.actions{flex-direction:column-reverse}.btn{width:100%}}
+  </style>
+</head>
+<body>
+<div class="page">
+<div class="hero">
+<div class="hero-card">
+<div class="brand"><div class="logo">ZS</div><div><h2>Zukunftssolar</h2><span>Feinplanung &amp; Montagevorbereitung</span></div></div>
+<h1>Professionelle PV-Feinplanung digital erfassen.</h1>
+<p class="lead">Alle Kundendaten, Produkte, Standorte, Kabelführungen, Entfernungen und Bilder werden strukturiert aufgenommen und über Jotform strukturiert erfasst und an info@zukunftssolar.de übermittelt.</p>
+<div class="chips"><span class="chip">Bilderupload</span><span class="chip">Stringführung</span><span class="chip">Zählerkasten</span><span class="chip">Speicherstandort</span><span class="chip">Montagefertige Zusammenfassung</span></div>
+</div>
+<div class="side-card">
+<div class="stat"><strong>7</strong><span>klare Schritte statt WhatsApp-Chaos</span></div>
+<div class="stat"><strong>100%</strong><span>einheitliche Datenerfassung für Vertrieb, Planung und Montage</span></div>
+<div class="stat"><strong>Jotform</strong><span>kompatibel mit Formular-Upload und E-Mail-Benachrichtigung</span></div>
+</div>
+</div>
+<div class="form-shell">
+<div id="successBanner" style="display:none;margin:0 0 18px;padding:16px 18px;border-radius:18px;background:rgba(124,255,155,.12);border:1px solid rgba(124,255,155,.35);color:#eaffef;font-weight:900;">✅ Feinplanung wurde erfolgreich übermittelt.</div>
+
+<div class="progress">
+<div class="steps" id="stepBars"></div>
+<div class="step-meta"><span id="stepTitle"><b>Schritt 1</b> Kundendaten</span><span id="stepCounter">1 / 7</span></div>
+</div>
+<form enctype="multipart/form-data" id="planningForm" method="POST" action="/.netlify/functions/submit-feinplanung">
+<input type="hidden" id="hiddenSummary" name="zusammenfassung"/>
+<input type="hidden" id="interneProjektnummer" name="interne_projektnummer"/>
+<input type="hidden" id="internerDateiname" name="interner_dateiname"/>
+<input type="hidden" id="montageOrdnerStruktur" name="montage_ordner_struktur"/>
+<section class="section active" data-title="Kundendaten">
+<h2>Kundendaten</h2><p class="sub">Basisdaten zum Kunden und Projekt. Pflichtfelder sind markiert.</p>
+<div class="grid">
+<div><label class="required">Kundenname</label><input name="kundenname" placeholder="Max Mustermann"/></div>
+<div><label>Projekt-/Angebotsnummer</label><input name="projektnummer" placeholder="ZS-2026-001"/></div>
+<div class="full"><label class="required">Objektadresse</label><input name="adresse" placeholder="Straße, PLZ, Ort"/></div>
+<div><label>Telefon</label><input name="telefon" placeholder="0151 ..." type="tel"/></div>
+<div><label>E-Mail Kunde</label><input name="kunden_email" placeholder="kunde@mail.de" type="email"/></div>
+<div><label>Erfasst von</label><input name="erfasst_von" placeholder="Name Vertriebler / Planer"/></div>
+<div><label>Datum Feinplanung</label><input name="datum" type="date"/></div>
+<div class="full"><label>Besonderheiten zum Kunden / Zugang</label><textarea name="kunden_hinweise" placeholder="z. B. Ansprechpartner, Zugang Keller, Hund im Garten, Schlüsselübergabe..."></textarea></div>
+</div>
+</section>
+<section class="section" data-title="Produkte">
+<h2>Produkte &amp; Systemdaten</h2><p class="sub">Die Jungs wählen eure Standardprodukte direkt aus dem Vertriebsrechner aus. Freitext bleibt nur noch für Sonderfälle.</p>
+<div class="grid three">
+<div>
+<label>PV-Modul</label>
+<select id="modulmodell" name="modulmodell">
+<option value="">Bitte auswählen</option>
+<option data-wp="480">LONGi 480 W Glas-Glas Full Black</option>
+<option data-wp="475">LONGi 475 W Glas-Glas Full Black</option>
+<option data-wp="460">JOLYWOOD 460 W Glas-Glas Full Black</option>
+</select>
+</div>
+<div><label>Anzahl Module</label><input id="modulanzahl" min="0" name="modulanzahl" placeholder="z. B. 46" type="number"/></div>
+<div><label>kWp gesamt <span class="hint">auto berechnet</span></label><input id="kwp" name="kwp" placeholder="z. B. 22,08 kWp"/></div>
+<div><label>Systemart</label><select id="systemart" name="systemart"><option value="">Bitte auswählen</option><option>Sigenergy TP2 Aktionspaket</option><option>Sigenergy Energy Controller 5 in 1 / frei kombinierbar</option><option>EcoFlow PowerOcean 2 / frei kombinierbar</option></select></div>
+<div class="tp2-field"><label>Sigenergy TP2 Set</label><select id="tp2_set" name="tp2_set"><option value="">Nur wählen, wenn TP2 Paket</option><option>Sigenergy Set Hybrid TP2 5 kW / 6 kWh</option><option>Sigenergy Set Hybrid TP2 8 kW / 9 kWh</option><option>Sigenergy Set Hybrid TP2 8 kW / 18 kWh</option><option>Sigenergy Set Hybrid TP2 10 kW / 9 kWh</option><option>Sigenergy Set Hybrid TP2 10 kW / 18 kWh</option><option>Sigenergy Set Hybrid TP2 12 kW / 9 kWh</option><option>Sigenergy Set Hybrid TP2 12 kW / 18 kWh</option></select></div><div class="full tp2-auto-box" id="tp2AutoBox">TP2-Aktion: Speicher und Wechselrichter sind im Set enthalten und werden automatisch aus dem ausgewählten TP2-Set übernommen. Die separaten Felder für Speicher/Wechselrichter werden dann ausgeblendet.</div>
+<div class="wr-field"><label>Wechselrichter / Controller</label><select id="wechselrichter" name="wechselrichter"><option value="">Bitte auswählen</option><option>Automatisch nach Modulanzahl &amp; Dachseiten</option><option>Sigenergy Energy Controller EC 5.0 TP / 2 MPPT</option><option>Sigenergy Energy Controller EC 6.0 TP / 2 MPPT</option><option>Sigenergy Energy Controller EC 8.0 TP / 2 MPPT</option><option>Sigenergy Energy Controller EC 10.0 TP / 3 MPPT</option><option>Sigenergy Energy Controller EC 12.0 TP / 3 MPPT</option><option>Sigenergy Energy Controller EC 15.0 TP / 3 MPPT</option><option>Sigenergy Energy Controller EC 17.0 TP / 4 MPPT</option><option>Sigenergy Energy Controller EC 20.0 TP / 4 MPPT</option><option>Sigenergy Energy Controller EC 25.0 TP / 4 MPPT</option><option>Sigenergy Energy Controller EC 30.0 TP / 4 MPPT</option><option>EcoFlow PowerOcean 2 Hybrid 6 kW / 3 MPPT</option><option>EcoFlow PowerOcean 2 Hybrid 8 kW / 3 MPPT</option><option>EcoFlow PowerOcean 2 Hybrid 10 kW / 3 MPPT</option><option>EcoFlow PowerOcean 2 Hybrid 12 kW / 3 MPPT</option></select></div>
+<div class="speicher-field"><label>Speicher</label><select id="speicher" name="speicher"><option value="">Bitte auswählen</option><option>Ohne Speicher</option><option>Sigenergy BAT 6 kWh</option><option>Sigenergy BAT 9 kWh</option><option>Sigenergy 12 kWh Paket (2x 6)</option><option>Sigenergy 15 kWh Paket (6+9)</option><option>Sigenergy 18 kWh Paket (2x 9)</option><option>Sigenergy 27 kWh Paket (3x 9)</option><option>Sigenergy 36 kWh Paket (4x 9)</option><option>Sigenergy 45 kWh Paket (5x 9)</option><option>Sigenergy 54 kWh Paket (6x 9)</option><option>EcoFlow PowerOcean 2 Batterie 5 kWh</option><option>EcoFlow PowerOcean 2 Speicher 10 kWh Paket</option><option>EcoFlow PowerOcean 2 Speicher 15 kWh Paket</option><option>EcoFlow PowerOcean 2 Speicher 20 kWh Paket</option><option>EcoFlow PowerOcean 2 Speicher 25 kWh Paket</option><option>EcoFlow PowerOcean 2 Speicher 30 kWh Paket</option></select></div>
+<div><label>Gateway / Notstrom</label><select name="gateway"><option value="">Bitte auswählen</option><option>Kein Notstrom / Gateway</option><option>Sigenergy HomePro Gateway</option><option>Noch offen / prüfen</option></select></div>
+<div><label>Speicher Montageart</label><select name="speicher_montageart"><option value="">Bitte auswählen</option><option>Bodenmontage</option><option>Wandmontage</option><option>Noch offen / vor Ort prüfen</option></select></div>
+<div><label>Smart Meter / Sensor</label><select name="smart_meter"><option>Sigenergy Smart Power Sensor</option><option>EcoFlow Smart Meter / Sensor</option><option>Anderer Smart Meter</option><option>Noch offen</option></select></div>
+<div><label>Zählerschrank / Elektro</label><select name="zaehlerschrank_leistung"><option value="">Bitte auswählen</option><option>Nicht notwendig</option><option>Unterverteilung</option><option>Kompletter neuer Zählerschrank</option><option>Großer Umbau / Sonderfall</option></select></div>
+<div><label>AC-Leistung</label><select name="ac_leistung"><option>AC Standard + Anmeldung</option><option>AC Sonderfall / vorher prüfen</option></select></div>
+<div><label>Wallbox</label><select name="wallbox"><option>Keine Wallbox</option><option>Sigenergy Sigen EV AC Charger 11 kW</option><option>Sigenergy Sigen EV AC Charger 22 kW</option><option>Sigenergy SigenStor EV DC Charging Module 12,5 kW / 7,5 m</option><option>Sigenergy SigenStor EV DC Charging Module 12,5 kW / 10 m</option><option>Sigenergy SigenStor EV DC Charging Module 25 kW / 7,5 m</option><option>Sigenergy SigenStor EV DC Charging Module 25 kW / 10 m</option></select></div>
+<div><label>Garantie / Care</label><select name="garantie"><option value="">Bitte auswählen</option><option>Keine Zusatzgarantie</option><option>Sigenergy Garantieverlängerung auf 15 Jahre</option><option>ZS Care 20 – Garantieverlängerung auf 20 Jahre</option></select></div>
+<div><label>Zusatzleistung</label><select name="zusatzprodukte"><option>Keine Zusatzleistung</option><option>Erdungsschiene extra</option><option>Gerüst ab 6m</option><option>Heizstab / Sonderprodukt</option><option>Sonstige Zusatzleistung</option></select></div>
+<div class="full"><label>Sonderprodukte / Produkt-Hinweise</label><textarea name="produkt_hinweise" placeholder="Nur ausfüllen, wenn etwas nicht in der Auswahl vorhanden ist oder der Kunde Sonderwünsche hat..."></textarea></div>
+</div>
+</section>
+<section class="section" data-title="Technikraum">
+<h2>Technikraum &amp; Elektro</h2><p class="sub">Standorte und Zustand von HAK, Zählerkasten, Erdung und Gerätestandorten dokumentieren.</p>
+<div class="grid">
+<div><label>Speicherstandort geplant</label><input name="speicherstandort" placeholder="z. B. Keller rechts neben Zählerschrank"/></div>
+<div><label>Wechselrichterstandort geplant</label><input name="wr_standort" placeholder="z. B. Garage / Technikraum"/></div>
+<div><label>Entfernung Zählerkasten → Speicher/WR</label><input name="entfernung_zaehler_speicher" placeholder="z. B. 8 Meter"/></div>
+<div><label>Erdung vorhanden?</label><select name="erdung_vorhanden"><option value="">Bitte auswählen</option><option>Ja</option><option>Nein</option><option>Unklar / prüfen</option></select></div>
+<div><label>Zählerkasten Zustand</label><select name="zaehlerkasten_zustand"><option value="">Bitte auswählen</option><option>Geeignet</option><option>Umbau notwendig</option><option>Neuer Zählerschrank notwendig</option><option>Unklar / Elektriker prüfen</option></select></div>
+<div><label>Hausanschlusskasten zugänglich?</label><select name="hak_zugang"><option value="">Bitte auswählen</option><option>Ja</option><option>Nein</option><option>Nur nach Absprache</option></select></div>
+<div><label>Freier Platz Speicher/WR ausreichend?</label><select name="platz_speicher_wr"><option value="">Bitte auswählen</option><option>Ja, ausreichend Platz vorhanden</option><option>Knapp / vor Ort prüfen</option><option>Nein / Alternativstandort notwendig</option></select></div>
+<div><label>Untergrund / Wandbeschaffenheit</label><select name="wand_untergrund"><option value="">Bitte auswählen</option><option>Massivwand / Beton / Stein</option><option>Trockenbau / ungeeignet</option><option>Bodenmontage auf ebenem Untergrund</option><option>Unklar / prüfen</option></select></div>
+<div><label>Umgebung frei von Wasser/Hitze?</label><select name="umgebung_sicher"><option value="">Bitte auswählen</option><option>Ja</option><option>Nein / Risiko sichtbar</option><option>Unklar / prüfen</option></select></div>
+<div><label>Zugang für Montage möglich?</label><select name="zugang_montage"><option value="">Bitte auswählen</option><option>Ja, gut zugänglich</option><option>Eng / Treppe / schwieriger Transport</option><option>Nur nach Absprache</option></select></div>
+<div class="full"><label>Elektro-Hinweise</label><textarea name="elektro_hinweise" placeholder="SLS, Überspannungsschutz, APZ, Platz, Brandschutz, Wandbeschaffenheit, Feuchtigkeit, Transportweg..."></textarea></div>
+
+
+
+
+
+
+
+
+
+</div>
+</section>
+<section class="section" data-title="Dach &amp; Belegung">
+<h2>Dach &amp; Modulbelegung</h2><p class="sub">Dachflächen, Belegungsplan und Hindernisse hochladen.</p>
+<div class="grid">
+<div><label>Dachtyp</label><select name="dachtyp"><option value="">Bitte auswählen</option><option>Ziegeldach</option><option>Flachdach</option><option>Trapezblech</option><option>Schiefer</option><option>Sonstiges</option></select></div>
+<div><label>Dachneigung / Ausrichtung</label><input name="dachneigung" placeholder="z. B. 35°, Süd-West"/></div>
+<div><label>Gerüst notwendig?</label><select name="geruest"><option value="">Bitte auswählen</option><option>Ja</option><option>Nein</option><option>Unklar</option></select></div>
+<div><label>Dachzugang</label><input name="dachzugang" placeholder="z. B. über Garten / Hof / Garage"/></div>
+<div class="full"><label>Dach-Hinweise</label><textarea name="dach_hinweise" placeholder="Gauben, Schornstein, Sat-Anlage, Verschattung, Schneefang, Dachfenster..."></textarea></div>
+<div class="upload-card"><label>Dachbilder <span class="hint">mehrere möglich</span></label><input accept="image/*,.pdf" multiple="" name="dachbilder" type="file"/><small>Fotos von allen relevanten Dachseiten hochladen.</small></div>
+<div class="upload-card"><label>Modulbelegung / Plan</label><input accept="image/*,.pdf" multiple="" name="modulbelegung" type="file"/><small>Screenshot, Skizze oder Planung der Modulbelegung.</small></div>
+</div>
+</section>
+<section class="section" data-title="Kabelführung">
+<h2>Stringkabel &amp; Kabelführung</h2><p class="sub">Außenfassade, Leitungswege und Entfernungen klar dokumentieren.</p>
+<div class="grid">
+<div><label>Stringanzahl / MPPT</label><input name="strings" placeholder="z. B. 2 Strings / 2 MPPT"/></div>
+<div><label>Entfernung Dach → WR</label><input name="entfernung_dach_wr" placeholder="z. B. 18 Meter"/></div>
+<div class="full"><label>Kabelführung Beschreibung</label><textarea name="kabelfuehrung" placeholder="Wo laufen die Stringkabel? Außenfassade, Fallrohr, Kabelkanal, Durchbruch, Kellerführung..."></textarea></div>
+<div class="upload-card"><label>Fassade mit Einzeichnung</label><input accept="image/*,.pdf" multiple="" name="fassade_einzeichnung" type="file"/><small>Bild der Fassade inkl. eingezeichnetem Kabelweg hochladen.</small></div>
+<div class="upload-card"><label>Durchbrüche / Leitungsweg innen</label><input accept="image/*,.pdf" multiple="" name="leitungsweg_innen" type="file"/><small>Fotos von Durchbrüchen, Keller, Garage oder Technikraum.</small></div>
+</div>
+</section>
+<section class="section" data-title="Bilderupload">
+<h2>Pflichtbilder &amp; Nachweise</h2><p class="sub">Hier lädt der Vertriebler alle notwendigen Elektro- und Umgebungsbilder hoch: Speicher/WR-Standort, HAK, Zählerkasten, Erdung, Kabelweg und Transportweg.</p>
+<div class="grid">
+
+
+
+
+
+
+<div class="full mini-title">Elektro-Pflichtbilder direkt auf dieser Seite</div><div class="upload-card"><label>Speicher-/WR-Umgebung Gesamtansicht <span class="hint">Pflicht</span></label><input accept="image/*,.pdf" multiple="" name="bild_umgebung_gesamt" type="file"/><small>Einmal breit fotografieren: Raum, Wand, Boden, Abstand, Zugänglichkeit.</small></div><div class="upload-card"><label>Geplanter Speicherstandort nah</label><input accept="image/*,.pdf" multiple="" name="bild_speicher_nah" type="file"/><small>Wand/Boden, Platz links/rechts, mögliche Hindernisse.</small></div><div class="upload-card"><label>Geplanter Wechselrichterstandort nah</label><input accept="image/*,.pdf" multiple="" name="bild_wr_nah" type="file"/><small>Wandfläche, Kabelführung, Montagehöhe und Umgebung.</small></div><div class="upload-card"><label>Zählerkasten innen + geschlossen</label><input accept="image/*,.pdf" multiple="" name="bild_zaehler_detail" type="file"/><small>Ein Foto geschlossen, ein Foto geöffnet/Innenansicht, wenn möglich.</small></div><div class="upload-card"><label>Hausanschlusskasten / HAK</label><input accept="image/*,.pdf" multiple="" name="bild_hak_detail" type="file"/><small>HAK komplett, Sicherungen, Umgebung und Zugänglichkeit.</small></div><div class="upload-card"><label>Erdungsschiene / Potentialausgleich</label><input accept="image/*,.pdf" multiple="" name="bild_erdung_detail" type="file"/><small>Schiene, Anschlussmöglichkeiten und Umgebung sichtbar.</small></div><div class="upload-card"><label>Kabelweg Zählerkasten → Speicher/WR</label><input accept="image/*,.pdf" multiple="" name="bild_kabelweg_zk_wr" type="file"/><small>Alle Räume/Wände auf dem Weg fotografieren, gerne mit Markierung.</small></div><div class="upload-card"><label>Transportweg zum Technikraum</label><input accept="image/*,.pdf" multiple="" name="bild_transportweg" type="file"/><small>Treppe, Türen, Kellerabgang, Engstellen und Zugang fotografieren.</small></div><div class="upload-card"><label>Sonstige Bilder</label><input accept="image/*,.pdf" multiple="" name="bild_sonstige" type="file"/><small>Alles, was für die Montage wichtig ist.</small></div></div>
+</section>
+<section class="section" data-title="Zusammenfassung">
+<h2>Zusammenfassung prüfen</h2><p class="sub">Vor dem Absenden kurz prüfen. Die Zusammenfassung wird zusätzlich an Jotform übermittelt.</p>
+<div class="notice">Nach dem Absenden findest du den Eingang in Jotform unter <b>Submissions / Eingänge</b>. Die E-Mail-Benachrichtigung bitte in Jotform unter <b>Settings → Emails</b> auf info@zukunftssolar.de setzen.</div>
+<div class="summary" id="summaryBox"></div>
+</section>
+<div class="success" id="successBox"><div class="badge">✓ Feinplanung übermittelt</div><h2>Danke, die Daten wurden abgeschickt.</h2><p class="sub">Die Feinplanung inklusive Bilder wurde an Jotform übergeben. Prüfe danach E-Mail, PDF und Jotform-Eingang.</p></div>
+<div class="actions" id="actions">
+<button class="btn btn-secondary" id="prevBtn" type="button">Zurück</button>
+<button class="btn btn-primary" id="nextBtn" type="button">Weiter</button>
+<button class="btn btn-primary" id="submitBtn" style="display:none" type="submit">Feinplanung absenden</button>
+</div>
+<div class="footer-note">Hinweis: Große Bildmengen können je nach Jotform-Plan begrenzt sein. Am besten Bilder vor Upload nicht unnötig groß lassen.</div>
+</form>
+</div>
+</div>
+<script>
+  const sections=[...document.querySelectorAll('.section')];
+  const stepBars=document.getElementById('stepBars');
+  const stepTitle=document.getElementById('stepTitle');
+  const stepCounter=document.getElementById('stepCounter');
+  const prevBtn=document.getElementById('prevBtn');
+  const nextBtn=document.getElementById('nextBtn');
+  const submitBtn=document.getElementById('submitBtn');
+  const form=document.getElementById('planningForm');
+  const summaryBox=document.getElementById('summaryBox');
+  const hiddenSummary=document.getElementById('hiddenSummary');
+  let current=0;
+
+  sections.forEach(()=>{ const bar=document.createElement('div'); bar.className='step-pill'; stepBars.appendChild(bar); });
+  const bars=[...document.querySelectorAll('.step-pill')];
+
+  function updateUI(){
+    sections.forEach((s,i)=>s.classList.toggle('active',i===current));
+    bars.forEach((b,i)=>b.classList.toggle('active',i<=current));
+    const title=sections[current].dataset.title;
+    stepTitle.innerHTML=`<b>Schritt ${current+1}</b> ${title}`;
+    stepCounter.textContent=`${current+1} / ${sections.length}`;
+    prevBtn.disabled=current===0;
+    nextBtn.style.display=current===sections.length-1?'none':'inline-block';
+    submitBtn.style.display=current===sections.length-1?'inline-block':'none';
+    if(current===sections.length-1) buildSummary();
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  function validateStep(){
+    const fields=[...sections[current].querySelectorAll('input,select,textarea')].filter(el=>el.required);
+    for(const field of fields){ if(!field.checkValidity()){ field.reportValidity(); return false; } }
+    return true;
+  }
+
+  nextBtn.addEventListener('click',()=>{ if(!validateStep()) return; if(current<sections.length-1){current++; updateUI();} });
+  prevBtn.addEventListener('click',()=>{ if(current>0){current--; updateUI();} });
+
+  function val(name){ const el=form.elements[name]; return el && el.value ? el.value : '—'; }
+  function files(name){ const el=form.elements[name]; return el && el.files && el.files.length ? [...el.files].map(f=>f.name).join(', ') : '—'; }
+
+
+  function cleanFilenamePart(value){
+    return String(value || '')
+      .trim()
+      .replace(/[ä]/g,'ae').replace(/[ö]/g,'oe').replace(/[ü]/g,'ue')
+      .replace(/[Ä]/g,'Ae').replace(/[Ö]/g,'Oe').replace(/[Ü]/g,'Ue')
+      .replace(/[ß]/g,'ss')
+      .replace(/[^a-zA-Z0-9]+/g,'_')
+      .replace(/^_+|_+$/g,'')
+      .slice(0,60);
+  }
+
+  function getTodayStamp(){
+    const d = new Date();
+    const pad = n => String(n).padStart(2,'0');
+    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  }
+
+  function getProjectNumber(){
+    const projektInput = form.elements['projektnummer'];
+    const hiddenProject = document.getElementById('interneProjektnummer');
+    let existing = projektInput && projektInput.value ? projektInput.value.trim() : '';
+
+    if(!existing){
+      const d = new Date();
+      const pad = n => String(n).padStart(2,'0');
+      existing = `ZS-${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}-${pad(d.getHours())}${pad(d.getMinutes())}`;
+      if(projektInput) projektInput.value = existing;
+    }
+
+    if(hiddenProject) hiddenProject.value = existing;
+    return existing;
+  }
+
+  function buildInternalFileName(){
+    const project = getProjectNumber();
+    const customer = cleanFilenamePart(val('kundenname')) || 'Kunde';
+    const date = getTodayStamp();
+    const filename = `Feinplanung_${project}_${customer}_${date}.pdf`;
+    const hiddenFile = document.getElementById('internerDateiname');
+    if(hiddenFile) hiddenFile.value = filename;
+    return filename;
+  }
+
+  function buildFolderStructureText(){
+    const project = getProjectNumber();
+    const customer = cleanFilenamePart(val('kundenname')) || 'Kunde';
+    const folder = `${project}_${customer}`;
+    const text =
+`### Empfohlene Montageordner-Struktur
+/${folder}/
+  01_Feinplanung_PDF/
+  02_Dachbilder/
+  03_Modulbelegung/
+  04_Zaehlerkasten_HAK_Erdung/
+  05_Technikraum_Speicher_WR/
+  06_Kabelfuehrung_Durchbrueche/
+  07_Sonstige_Bilder/
+
+Interner PDF-Dateiname:
+${buildInternalFileName()}`;
+    const hiddenFolder = document.getElementById('montageOrdnerStruktur');
+    if(hiddenFolder) hiddenFolder.value = text;
+    return text;
+  }
+
+
+  function buildSummary(){
+    const groups=[
+      ['Kunde',`Name: ${val('kundenname')}\nProjekt: ${val('projektnummer')}\nAdresse: ${val('adresse')}\nTelefon: ${val('telefon')}\nE-Mail: ${val('kunden_email')}\nErfasst von: ${val('erfasst_von')}\nDatum: ${val('datum')}\nHinweise: ${val('kunden_hinweise')}`],
+      ['Produkte',`Modul: ${val('modulmodell')}
+Anzahl Module: ${val('modulanzahl')}
+kWp gesamt: ${val('kwp')}
+Systemart: ${val('systemart')}
+TP2 Set: ${val('tp2_set')}
+WR/Controller: ${val('wechselrichter')}
+Speicher: ${val('speicher')}
+Gateway/Notstrom: ${val('gateway')}
+Speicher Montageart: ${val('speicher_montageart')}
+Smart Meter/Sensor: ${val('smart_meter')}
+Zählerschrank/Elektro: ${val('zaehlerschrank_leistung')}
+AC-Leistung: ${val('ac_leistung')}
+Wallbox: ${val('wallbox')}
+Garantie/Care: ${val('garantie')}
+Zusatz: ${val('zusatzprodukte')}
+Hinweise: ${val('produkt_hinweise')}`],
+      ['Technikraum',`Speicherstandort: ${val('speicherstandort')}\nWR-Standort: ${val('wr_standort')}\nEntfernung ZK → Speicher/WR: ${val('entfernung_zaehler_speicher')}\nErdung: ${val('erdung_vorhanden')}\nZählerkasten: ${val('zaehlerkasten_zustand')}\nHAK Zugang: ${val('hak_zugang')}\nHinweise: ${val('elektro_hinweise')}`],
+      ['Dach',`Dachtyp: ${val('dachtyp')}\nNeigung/Ausrichtung: ${val('dachneigung')}\nGerüst: ${val('geruest')}\nDachzugang: ${val('dachzugang')}\nHinweise: ${val('dach_hinweise')}\nDachbilder: ${files('dachbilder')}\nModulbelegung: ${files('modulbelegung')}`],
+      ['Kabelführung',`Strings/MPPT: ${val('strings')}\nEntfernung Dach → WR: ${val('entfernung_dach_wr')}\nBeschreibung: ${val('kabelfuehrung')}\nFassade: ${files('fassade_einzeichnung')}\nLeitungsweg innen: ${files('leitungsweg_innen')}`],
+      ['Bilder',`Umgebung Gesamt: ${files('bild_umgebung_gesamt')}\nSpeicher nah: ${files('bild_speicher_nah')}\nWR nah: ${files('bild_wr_nah')}\nZählerkasten: ${files('bild_zaehler_detail')}\nHAK: ${files('bild_hak_detail')}\nErdung: ${files('bild_erdung_detail')}\nKabelweg ZK → WR: ${files('bild_kabelweg_zk_wr')}\nTransportweg: ${files('bild_transportweg')}\nSonstige: ${files('bild_sonstige')}`]
+    ];
+    const internalInfo = buildFolderStructureText();
+    groups.push(['Interne Ablage', internalInfo]);
+    summaryBox.innerHTML=groups.map(([h,t])=>`<div class="summary-card"><h3>${h}</h3><div>${t.replace(/[&<>]/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]))}</div></div>`).join('');
+    hiddenSummary.value=groups.map(([h,t])=>`### ${h}\n${t}`).join('\n\n');
+  }
+
+  const moduleSelect=document.getElementById('modulmodell');
+  const moduleCount=document.getElementById('modulanzahl');
+  const kwpField=document.getElementById('kwp');
+  function updateKwp(){
+    if(!moduleSelect || !moduleCount || !kwpField) return;
+    const opt=moduleSelect.options[moduleSelect.selectedIndex];
+    const wp=Number(opt && opt.dataset ? opt.dataset.wp : 0);
+    const count=Number(moduleCount.value || 0);
+    if(wp && count){
+      kwpField.value=((wp*count)/1000).toLocaleString('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2})+' kWp';
+    }
+  }
+  if(moduleSelect) moduleSelect.addEventListener('change', updateKwp);
+  if(moduleCount) moduleCount.addEventListener('input', updateKwp);
+
+
+
+  const systemart=document.getElementById('systemart');
+  const tp2Set=document.getElementById('tp2_set');
+  const wrSelect=document.getElementById('wechselrichter');
+  const speicherSelect=document.getElementById('speicher');
+  const wrField=document.querySelector('.wr-field');
+  const speicherField=document.querySelector('.speicher-field');
+  const tp2AutoBox=document.getElementById('tp2AutoBox');
+
+  function setSelectValue(select, text){
+    if(!select) return;
+    let found=[...select.options].find(o=>o.textContent.trim()===text);
+    if(!found){
+      found=document.createElement('option');
+      found.textContent=text;
+      found.value=text;
+      select.appendChild(found);
+    }
+    select.value=found.value || found.textContent;
+  }
+
+  function applyTp2Automation(){
+    const isTp2=(systemart && systemart.value.includes('TP2')) || (tp2Set && tp2Set.value.includes('TP2'));
+    if(wrField) wrField.classList.toggle('auto-hidden', isTp2);
+    if(speicherField) speicherField.classList.toggle('auto-hidden', isTp2);
+    if(tp2AutoBox) tp2AutoBox.classList.toggle('show', isTp2);
+    if(isTp2 && tp2Set && tp2Set.value){
+      const match=tp2Set.value.match(/TP2\s+([0-9]+)\s*kW\s*\/\s*([0-9]+)\s*kWh/i);
+      if(match){
+        setSelectValue(wrSelect, `Im TP2 Set enthalten: Sigenergy TP2 Hybrid ${match[1]} kW`);
+        setSelectValue(speicherSelect, `Im TP2 Set enthalten: Sigenergy Speicher ${match[2]} kWh`);
+      } else {
+        setSelectValue(wrSelect, 'Im TP2 Set enthalten');
+        setSelectValue(speicherSelect, 'Im TP2 Set enthalten');
+      }
+    }
+  }
+  if(systemart) systemart.addEventListener('change', applyTp2Automation);
+  if(tp2Set) tp2Set.addEventListener('change', applyTp2Automation);
+  applyTp2Automation();
+updateUI();
+</script>
+</body>
+</html>
